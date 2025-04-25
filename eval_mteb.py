@@ -1084,7 +1084,7 @@ SET_TO_FEWSHOT_PROMPT = {
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--base_model', default="GritLM/GritLM-7B", type=str)
+    parser.add_argument('--base_model', default="allenai/OLMoE-1B-7B-0924", type=str)
     parser.add_argument('--attn_implementation', default='sdpa', type=str, help="eager/sdpa/flash_attention_2")
     parser.add_argument('--attn', default='bbcc', type=str, help="only first two letters matter for embedding")
     parser.add_argument('--task_types', default=None, help="Comma separated. Default is None i.e. running all tasks")
@@ -1127,7 +1127,11 @@ if __name__ == '__main__':
 
     # Quick skip if exists
     model_name = args.base_model.rstrip('/').split('/')[-1]
-    output_folder = args.output_folder if args.output_folder else f"results/{model_name}"
+    output_folder = args.output_folder if args.output_folder else f"mteb_results_ablation/{model_name}/{args.task_types}"
+
+    os.makedirs(output_folder, exist_ok=True)
+    with open(os.path.join(output_folder, "parser_para.json"), "w") as f:
+        json.dump(vars(args), f, indent=4)
     
     if (args.task_names is not None) and (len(args.task_names.split(",")) == 1) and os.path.exists(f"{output_folder}/{args.task_names.split(',')[0]}.json"):
         print(f"Skipping {args.task_names.split(',')[0]}")
@@ -1239,7 +1243,7 @@ if __name__ == '__main__':
                 save_qrels=args.save_qrels,
                 top_k=args.top_k,
                 overwrite_results=args.overwrite_results,
-                output_folder=f"mteb_results_ablation/{task_type}/{args.base_model}_{args.use_4bit}_{task_name}_{args.do_pca}_{args.pca_dim}_{args.emb_info}_{args.embed_method}_{args.no_instruction}_{args.similarity_ensemble}_{args.similarity_weights}_{args.ablation}", 
+                output_folder=output_folder+f"/{args.emb_info}_{task_name}", 
                 encode_kwargs = {'do_pca': args.do_pca, 'pca_dim': args.pca_dim, 'emb_info': args.emb_info, 'embed_method': args.embed_method, 'batch_size': args.batch_size, 'similarity_ensemble': args.similarity_ensemble, 'similarity_weights': args.similarity_weights},
             )
         
