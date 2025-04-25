@@ -1243,7 +1243,7 @@ if __name__ == '__main__':
                 save_qrels=args.save_qrels,
                 top_k=args.top_k,
                 overwrite_results=args.overwrite_results,
-                output_folder=output_folder+f"/{args.emb_info}_{task_name}", 
+                output_folder=output_folder+f"/{args.emb_info}_{args.embed_method}_{task_name}", 
                 encode_kwargs = {'do_pca': args.do_pca, 'pca_dim': args.pca_dim, 'emb_info': args.emb_info, 'embed_method': args.embed_method, 'batch_size': args.batch_size, 'similarity_ensemble': args.similarity_ensemble, 'similarity_weights': args.similarity_weights},
             )
         

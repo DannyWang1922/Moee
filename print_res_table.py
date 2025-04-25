@@ -18,10 +18,10 @@ def read_score_from_json(json_path):
         except (KeyError, IndexError, TypeError):
             return 0 
 
-def collect_scores(method_prefix):
+def collect_scores(emb_info, embed_method):
     scores = []
     for task in task_list:
-        task_folder_name = f"{method_prefix}_{task}"
+        task_folder_name = f"{emb_info}_{embed_method}_{task}"
         json_file_name = f"{task}.json"
         json_path = os.path.join(base_path, task_folder_name, sub_path, json_file_name)
 
@@ -40,10 +40,13 @@ model_name = "OLMoE-1B-7B-0924"
 task_list = ['STS12', 'STS13', 'STS14', 'STS15', 'STS16', 'STSBenchmark', "SICK-R"]
 task_types = "STS"
 
-methods = ["HS", "RW", "MoEE"]
+emb_info_list = ["HS", "RW", "MoEE"]
+embed_method_list = ["none", "prompteol"]
 base_path = f"mteb_results_ablation/{model_name}/{task_types}"
 sub_path  = "no_model_name_available/no_revision_available"
 
-for method in methods:
-    task_scores, average_score = collect_scores(method)
-    print_table(method, task_list, task_scores, average_score)
+for embed_method in embed_method_list:
+    for emb_info in emb_info_list:
+        model_name = f"{emb_info}_{embed_method}"
+        task_scores, average_score = collect_scores(emb_info, embed_method)
+        print_table(model_name, task_list, task_scores, average_score)
