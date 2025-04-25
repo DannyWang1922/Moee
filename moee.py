@@ -210,7 +210,12 @@ class MOEE(torch.nn.Module):
             prompts = self.tokenizer(prompts, padding=True, return_tensors="pt")
 
             if get_cache:
-                inputs['use_cache'] = True               
+                inputs['use_cache'] = True   
+
+            device = next(self.model.parameters()).device
+            for k, v in prompts.items():
+                if isinstance(v, torch.Tensor):
+                    prompts[k] = v.to(device)           
                 
             outputs, sent_emb = self.model(**prompts, output_hidden_states=True, return_dict=True)                    
             sent_emb = sent_emb.cpu()
