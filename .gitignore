@@ -5,6 +5,5 @@ __pycache__/
 *$py.class
 *.log
 *.pt
-*.json
 *.npy
 mteb_results_ablation/
