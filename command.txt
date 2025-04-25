@@ -1,0 +1,4 @@
+python eval_mteb.py --base_model allenai/OLMoE-1B-7B-0924 --use_4bit --task_types STS --batch_size 128  --emb_info MoEE --embed_method none
+
+CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model allenai/OLMoE-1B-7B-0924 --use_4bit --task_types STS --ba
+tch_size 1024  --emb_info MoEE --embed_method none
