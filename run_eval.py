@@ -6,9 +6,12 @@ task_types = "STS"
 batch_size = "1024"
 
 cmd_list = [
-    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size}  --emb_info HS --embed_method none",
-    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size}  --emb_info RW --embed_method none"
-    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size}  --emb_info MoEE --embed_method none"
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method none --emb_info HS ",
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method none --emb_info RW ",
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method none --emb_info MoEE ",
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method prompteol --emb_info HS ",
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method prompteol --emb_info RW ",
+    f"CUDA_VISIBLE_DEVICES=1 python eval_mteb.py --base_model {model_name} --use_4bit --task_types {task_types} --batch_size {batch_size} --embed_method prompteol --emb_info MoEE "
     ]
 
 for cmd in cmd_list:

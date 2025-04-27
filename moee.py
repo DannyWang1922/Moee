@@ -24,14 +24,19 @@ def load_pretrained_model(base_model, model_type) -> tuple:
     Returns:
         tuple(model, tokenizer): Loaded model and tokenizer
     """
+
+    device = torch.device("cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu"))
+    use_quantization = device.type == "cuda"  # only use quantization on CUDA devices
     
     # Configuration for 4-bit quantization
-    nf4_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=torch.bfloat16
-    )
+    nf4_config = None
+    if use_quantization:
+        nf4_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
     
     # Load the tokenizer
     tokenizer = AutoTokenizer.from_pretrained(base_model)
