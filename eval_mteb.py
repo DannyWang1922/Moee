@@ -1087,7 +1087,7 @@ def get_args():
     parser.add_argument('--base_model', default="allenai/OLMoE-1B-7B-0924", type=str)
     parser.add_argument('--attn_implementation', default='sdpa', type=str, help="eager/sdpa/flash_attention_2")
     parser.add_argument('--attn', default='bbcc', type=str, help="only first two letters matter for embedding")
-    parser.add_argument('--task_types', default=None, help="Comma separated. Default is None i.e. running all tasks")
+    parser.add_argument('--task_types', default="STS", help="Comma separated. Default is None i.e. running all tasks")
     parser.add_argument('--task_names', default=None, help="Comma separated. Default is None i.e. running all tasks")
     parser.add_argument('--instruction_set', default="e5", type=str, help="Instructions to use")
     parser.add_argument('--instruction_format', default="gritlm", type=str, help="Formatting to use")
@@ -1127,7 +1127,7 @@ if __name__ == '__main__':
 
     # Quick skip if exists
     model_name = args.base_model.rstrip('/').split('/')[-1]
-    output_folder = args.output_folder if args.output_folder else f"mteb_results_ablation/{model_name}/{args.task_types}"
+    output_folder = args.output_folder if args.output_folder else f"mteb_results_ablation/{model_name}"
 
     os.makedirs(output_folder, exist_ok=True)
     with open(os.path.join(output_folder, "parser_para.json"), "w") as f:
@@ -1235,7 +1235,6 @@ if __name__ == '__main__':
             eval_splits = ["test" if task_name not in ['MSMARCO'] else 'dev']
             evaluation = MTEB(tasks=[task_name], task_langs=['en'])
            
-            
             results = evaluation.run(
                 model,
                 eval_splits=eval_splits,
@@ -1243,10 +1242,9 @@ if __name__ == '__main__':
                 save_qrels=args.save_qrels,
                 top_k=args.top_k,
                 overwrite_results=args.overwrite_results,
-                output_folder=output_folder+f"/{args.emb_info}_{args.embed_method}_{task_name}", 
+                output_folder=output_folder+f"/{task_type}/{args.emb_info}_{args.embed_method}_{task_name}", 
                 encode_kwargs = {'do_pca': args.do_pca, 'pca_dim': args.pca_dim, 'emb_info': args.emb_info, 'embed_method': args.embed_method, 'batch_size': args.batch_size, 'similarity_ensemble': args.similarity_ensemble, 'similarity_weights': args.similarity_weights},
             )
-        
         
             if results == []:
                 continue

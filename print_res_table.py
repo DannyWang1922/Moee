@@ -36,7 +36,7 @@ def collect_scores(emb_info, embed_method):
     return scores, avg_score
 
 
-model_name = "OLMoE-1B-7B-0924"
+model_name = "Qwen1.5-MoE-A2.7B" # OLMoE-1B-7B-0924, Qwen1.5-MoE-A2.7B
 task_list = ['STS12', 'STS13', 'STS14', 'STS15', 'STS16', 'STSBenchmark', "SICK-R"]
 task_types = "STS"
 
